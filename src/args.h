@@ -55,9 +55,18 @@ void print_usage(void);
 /** Print the program version number **/
 void print_version(void);
 
-/* Jet defaults */
+/** Jet defaults **/
 #define MOAB_STATS_DIR          "/misc/moab/moabhome/stats"
 #define RESERVATION_FILE        "/misc/moab/moabhome/etc/jet.reservations.cfg"
+
+/** Program name **/
+#if HAVE_GETPROGNAME
+#define PROG_NAME               getprogname()
+#endif
+
+#if HAVE_PROGRAM_INVOCATION_SHORT_NAME
+#define PROG_NAME               program_invocation_short_name
+#endif
 
 #ifdef __cplusplus
 }                               /* extern "C" */

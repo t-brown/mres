@@ -99,7 +99,7 @@ project_rsv(const char *filename,
 			while (p != NULL) {
 				if (strncmp(p->name,
 					    line + rm[1].rm_so, rlen -1) == 0) {
-					p->epochs[p->nepochs] = strtol(line +rm[2].rm_so, NULL, 10);
+					p->epochs[p->nepochs] = strtoul(line +rm[2].rm_so, NULL, 10);
 					p->nepochs += 1;
 					seen = 1;
 				}
@@ -111,7 +111,7 @@ project_rsv(const char *filename,
 				p->name = xmalloc(rlen *sizeof(char));
 				strncpy(p->name, line + rm[1].rm_so, rlen -1);
 				p->nepochs = 1;
-				p->epochs[0] = strtol(line +rm[2].rm_so, NULL, 10);
+				p->epochs[0] = strtoul(line +rm[2].rm_so, NULL, 10);
 				p->next = *projects;
 				*projects = p;
 			}

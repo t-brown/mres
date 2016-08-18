@@ -52,6 +52,8 @@ extern "C"
 struct project {
 	uint8_t      nepochs;
 	uint8_t      epochs[MAX_EPOCHS];
+	int64_t      nr;
+	int64_t      nj;
 	char         *name;
 	struct event *reservations;
 	struct event *jobs;

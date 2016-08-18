@@ -203,14 +203,13 @@ ATT_NORETURN
 void
 print_version(void)
 {
-	printf("%s (GNU %s) %s\n\
-Copyright (C) %s %s.\n\
-License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n\
-This is free software: you are free to change and redistribute it.\n\
-There is NO WARRANTY, to the extent permitted by law.\n\n\
-Compiled on %s at %s.\n\n",
-	PROG_NAME, PACKAGE, VERSION,
-	AUTHOR, YEAR, __DATE__, __TIME__);
+	printf("%s (GNU %s) %s\n"
+	       "Copyright (C) %s.\n"
+	       "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\n"
+	       "This is free software: you are free to change and redistribute it.\n"
+	       "There is NO WARRANTY, to the extent permitted by law.\n\n"
+	       "Compiled on %s at %s.\n\n",
+	       PROG_NAME, PACKAGE, VERSION, PACKAGE_BUGREPORT, __DATE__, __TIME__);
 
 	exit(EXIT_FAILURE);
 }

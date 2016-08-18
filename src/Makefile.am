@@ -20,6 +20,7 @@ kres_SOURCES     = atts.h               \
                   args.h      args.c    \
                   main.c                \
                   events.h    events.c  \
+                  io.h        io.c      \
                   mem.h       mem.c     \
                   projects.h  projects.c
 

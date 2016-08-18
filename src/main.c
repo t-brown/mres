@@ -30,12 +30,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <time.h>
+#include <hdf5.h>
 
 #include "config.h"
 #include "args.h"
 #include "mem.h"
 #include "events.h"
 #include "projects.h"
+#include "io.h"
 
 int
 main(int argc, char **argv)
@@ -44,7 +46,9 @@ main(int argc, char **argv)
 	int32_t i         = 0;
 	struct args a     = {0};
 	struct project *projects = NULL;
+	hid_t  fid        = 0;
 	struct project *pptr = NULL;
+	/*
 	struct event *r   = NULL;
 	struct event *j   = NULL;
 	struct tm gmts    = {0};
@@ -55,6 +59,7 @@ main(int argc, char **argv)
 	const char rhdr[] = "Reservation\tEpoch\tStart\t\t\tEnd\t\t\tNodes\n";
 	const char rfmt[] = "%-10s\t%02d\t%-20s\t%-20s\t%4d\n";
 	const char jfmt[] = "%10d\t\t%-20s\t%-20s\t%4d\n";
+	*/
 
 
 	if (args_parse(argc, argv, &a)) {
@@ -71,6 +76,7 @@ main(int argc, char **argv)
 		return(EXIT_FAILURE);
 	}
 
+	/*
 	pptr = projects;
 	if (pptr != NULL) {
 		printf(rhdr);
@@ -98,7 +104,15 @@ main(int argc, char **argv)
 		}
 		pptr = pptr->next;
 	}
+	*/
 
+	io_open(a.output, &fid);
+	pptr = projects;
+	while (pptr != NULL) {
+		io_write(fid, pptr);
+		pptr = pptr->next;
+	}
+	io_close(fid);
 
 	/* Clean up */
 #if 0

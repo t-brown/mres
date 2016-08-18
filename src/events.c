@@ -29,10 +29,10 @@
 #include <string.h>
 #include <nmmintrin.h>
 
+#include "config.h"
 #include "mem.h"
 #include "events.h"
 #include "projects.h"
-#include "bndm.h"
 
 /**
  * Generate the full filename for an event log file.
@@ -166,16 +166,19 @@ event_rsv(const char *restrict line,
 	  )
 {
 	static const char r[] = "RSVEND.*"
+				"NAME=([A-za-z0-9-]+)-([0-9]{2})z\.([0-9]+).*"
 				"STARTTIME=([0-9]+).*"
 				"ENDTIME=([0-9]+).*"
-				"ALLOCTC=([0-9]+).*"
+				"ALLOCTC=([0-9]+).*";
+#if 0
 				"RSVGROUP=([A-za-z0-9-]+)-([0-9]{2})z";
+#endif
 	uint8_t update        = 0;
 	int32_t ierr          = 0;
 	int32_t nlen          = 0;
 	char rstr[PAGE_SIZE];
 	static regex_t rq     = {0};
-	regmatch_t m[6]       = {0};
+	regmatch_t m[7]       = {0};
 	struct event *res     = NULL;
 	struct event *tmp     = NULL;
 	struct project *p     = NULL;
@@ -187,7 +190,7 @@ event_rsv(const char *restrict line,
 		warnx("unable to compile regex '%s': %s", r, rstr);
 		return(EXIT_FAILURE);
 	}
-	if (regexec(&rq, line, 6, m, 0) == 0) {
+	if (regexec(&rq, line, 7, m, 0) == 0) {
 #if 0
 		printf("start: %.*s\tend: %.*s\trsv: %.*s\tnodes: %.*s\n",
 		       m[1].rm_eo - m[1].rm_so, line + m[1].rm_so,
@@ -197,13 +200,14 @@ event_rsv(const char *restrict line,
 		       );
 #endif
 		res = xmalloc(sizeof(struct event));
-		res->start = strtol(line + m[1].rm_so, NULL, 10);
-		res->end   = strtol(line + m[2].rm_so, NULL, 10);
-		res->nodes = strtol(line + m[3].rm_so, NULL, 10);
-		res->epoch = strtol(line + m[5].rm_so, NULL, 10);
-		nlen = m[4].rm_eo - m[4].rm_so;
+		nlen = m[1].rm_eo - m[1].rm_so;
 		res->name  = xmalloc((nlen +1)*sizeof(char));
-		strncpy(res->name, line + m[4].rm_so, nlen);
+		strncpy(res->name, line + m[1].rm_so, nlen);
+		res->epoch = strtoul(line + m[2].rm_so, NULL, 10);
+		res->id    = strtol(line + m[3].rm_so, NULL, 10);
+		res->start = strtol(line + m[4].rm_so, NULL, 10);
+		res->end   = strtol(line + m[5].rm_so, NULL, 10);
+		res->nodes = strtol(line + m[6].rm_so, NULL, 10);
 		/* Search for the reservation within the projects */
 		p = *projects;
 		while (p != NULL) {
@@ -211,7 +215,7 @@ event_rsv(const char *restrict line,
 				/* MOAB creates a reservation even if all
 				 * nodes are not avaliable. It will then
 				 * recreate the reservation when more nodes
-				 * are added. So we much check to see if
+				 * are added. So we must check to see if
 				 * this is an "update" to a reservation.
 				 */
 				tmp = p->reservations;
@@ -230,6 +234,7 @@ event_rsv(const char *restrict line,
 				} else {
 					res->next = p->reservations;
 					p->reservations = res;
+					p->nr += 1;
 				}
 				break;
 			}
@@ -303,7 +308,7 @@ event_job(const char *restrict line,
 	    isdigit(*(sptr -2)) &&
 	    isdigit(*(sptr -3))) {
 		sptr -= 4;  /* remove the leading - too */
-		job->epoch = strtol(sptr, NULL, 10);
+		job->epoch = strtoul(sptr+1, NULL, 10);
 	}
 
 	nlen = sptr - ptr;
@@ -358,6 +363,7 @@ event_job(const char *restrict line,
 			job->id = strtol(sptr, NULL, 10);
 			ptr = sptr;
 
+			p->nj += 1;
 			job->next = p->jobs;
 			p->jobs = job;
 		}

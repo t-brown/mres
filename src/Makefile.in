@@ -52,7 +52,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_kres_OBJECTS = args.$(OBJEXT) main.$(OBJEXT) events.$(OBJEXT) \
-	mem.$(OBJEXT) projects.$(OBJEXT)
+	io.$(OBJEXT) mem.$(OBJEXT) projects.$(OBJEXT)
 kres_OBJECTS = $(am_kres_OBJECTS)
 am__DEPENDENCIES_1 =
 kres_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
@@ -180,6 +180,7 @@ kres_SOURCES = atts.h               \
                   args.h      args.c    \
                   main.c                \
                   events.h    events.c  \
+                  io.h        io.c      \
                   mem.h       mem.c     \
                   projects.h  projects.c
 
@@ -284,6 +285,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/args.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/events.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/io.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mem.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/projects.Po@am__quote@

@@ -47,7 +47,7 @@ extern "C"
 #define X_QUOTE(a)      ((#a)[0])
 #define X_ENUM(a, b)    a =(int)b
 #define X_ARRAY(a, b)   [a] = b,
-#define X_PROTO(a, b)   int32_t b(const char *restrict, void *);
+#define X_PROTO(a, b)   int b(const char *restrict, void *);
 
 /** Event table.
  * Provides a lookup table/array. The elements are
@@ -61,23 +61,23 @@ extern "C"
 
 /** Linked list structure for events **/
 struct event {
-	int32_t epoch;
+	uint8_t epoch;
 	int64_t id;
 	int64_t nodes;
-	time_t start;
-	time_t end;
-	char *name;
+	time_t  start;
+	time_t  end;
+	char    *name;
 	struct event *next;
 };
 
 /** Function pointer definition for a line matching an event **/
-typedef int32_t (*event_fp)(const char *restrict, void *);
+typedef int (*event_fp)(const char *restrict, void *);
 
 /** Obtain the full path to an event log file **/
-int32_t event_file(int32_t, const char *, char **);
+int event_file(int32_t, const char *, char **);
 
 /** Parse an event log file for reservation records **/
-int32_t event_search(const char *, int32_t, void *);
+int event_search(const char *, int32_t, void *);
 
 /** Generate event function pointers definitions **/
 EVENTS_TABLE(X_PROTO)

@@ -137,9 +137,9 @@ io_write(hid_t id, const struct project *p)
 	/* Write the project epochs as an attribute */
 	dims = p->nepochs;
 	did = H5Screate_simple(1, &dims, NULL);
-	eid = H5Acreate(gid, "Epochs", H5T_STD_I32LE, did,
-			H5P_DEFAULT, H5P_DEFAULT);
-	ierr = H5Awrite(eid, H5T_NATIVE_INT, &((p->epochs)[0]));
+	eid = H5Acreate(gid, "Epochs", H5T_NATIVE_UINT8,
+			did, H5P_DEFAULT, H5P_DEFAULT);
+	ierr = H5Awrite(eid, H5T_NATIVE_UINT8, &((p->epochs)[0]));
 	ierr = H5Aclose(eid);
 
 	/* Create a group for reservations */
@@ -179,13 +179,13 @@ io_write_events(hid_t id, const struct event *e, int64_t n)
 {
 	int64_t i = 0;
 	struct event *eptr = NULL;
-	int32_t *edata  = NULL;
+	uint8_t *edata  = NULL;
 	int64_t *ids    = NULL;
 	int64_t *nodes  = NULL;
 	int64_t *starts = NULL;
 	int64_t *ends   = NULL;
 
-	edata  = xmemalign(n*sizeof(int32_t));
+	edata  = xmemalign(n*sizeof(uint8_t));
 	ids    = xmemalign(n*sizeof(int64_t));
 	nodes  = xmemalign(n*sizeof(int64_t));
 	starts = xmemalign(n*sizeof(int64_t));
@@ -204,7 +204,7 @@ io_write_events(hid_t id, const struct event *e, int64_t n)
 	}
 
 	/* write the data */
-	io_write_data(id, "epochs", edata,  n, H5T_NATIVE_INT32);
+	io_write_data(id, "epochs", edata,  n, H5T_NATIVE_UINT8);
 	io_write_data(id, "ids",    ids,    n, H5T_NATIVE_INT64);
 	io_write_data(id, "nodes",  nodes,  n, H5T_NATIVE_INT64);
 	io_write_data(id, "starts", starts, n, H5T_NATIVE_INT64);

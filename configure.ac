@@ -3,10 +3,8 @@ dnl Process this file with autoconf to produce a configure script.
 dnl
 
 AC_PREREQ(2.61)
-AC_INIT([kres], [0.1], [Timothy.P.Brown@noaa.gov])
+AC_INIT([mres], [0.1], [Timothy.P.Brown@noaa.gov])
 AC_CONFIG_AUX_DIR([build-aux])
-
-AC_SUBST(PACKAGE_VERSION)
 
 # Initialise automake
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
@@ -19,13 +17,17 @@ AC_CONFIG_SRCDIR([src/main.c])
 # Put our generated config header in the source directory
 AC_CONFIG_HEADERS([src/config.h])
 
+# Checks for compiler support/falgs
+AC_PROG_CC_C99
+AC_C_RESTRICT
+
 # Checks for header files
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdint.h stdlib.h string.h unistd.h])
 
 # Checks for functions and libraries
-AC_CHECK_FUNCS([memset strrchr uname getprogname
-		program_invocation_short_name])
+AC_CHECK_FUNCS(memset strrchr uname getprogname \
+               program_invocation_short_name)
 AC_FUNC_MALLOC
 
 # Check for HDF5 support
@@ -43,11 +45,9 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT
 echo
 echo
-echo
-"========================================================================"
+echo "========================================================================"
 echo "$PACKAGE_NAME              version $PACKAGE_VERSION"
-echo
-"------------------------------------------------------------------------"
+echo "------------------------------------------------------------------------"
 echo
 echo "Configuration Options Summary:"
 echo
