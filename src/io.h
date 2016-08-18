@@ -27,46 +27,35 @@
  */
 
 /**
- * \file config.h
- * Configuration definitions from cmake
+ * \file io.h
+ * I/O routines
  *
- * \ingroup attributes
+ * \ingroup io
  * \{
  **/
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef IO_H
+#define IO_H
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-#define PACKAGE "@PACKAGE@"
-#define VERSION "@VERSION@"
-#define AUTHOR  "@AUTHOR@"
-#define YEAR    "@YEAR@"
+/** Open/Append to a file **/
+int io_open(const char *, hid_t *);
 
-#cmakedefine HAVE_GETPROGNAME
-#cmakedefine HAVE_PROGRAM_INVOCATION_SHORT_NAME
+/** Close a file **/
+int io_close(hid_t);
 
-#ifdef HAVE_GETPROGNAME
-  #define PROG_NAME getprogname()
-#else
-  #ifdef HAVE_PROGRAM_INVOCATION_SHORT_NAME
-    #define PROG_NAME program_invocation_short_name
-  #else
-    #define PROG_NAME "unknown"
-  #endif
-#endif
-
-
+/** Write a reservation **/
+int io_write(hid_t, const struct project *);
 
 #ifdef __cplusplus
 }                               /* extern "C" */
 #endif
 
-#endif                          /* CONFIG_H */
+#endif                          /* IO_H */
 /**
  * \}
  **/
